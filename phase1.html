@@ -1,0 +1,148 @@
+﻿<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="stylesheet.css">
+<title>To-Do List App</title>
+<script>
+
+//function to add tasks to the list
+function addTask(){
+	var newTask = document.createElement('input');
+	var text = document.getElementById('txt').value;
+	if(text !=''){
+		newTask.type = "checkbox";
+		newTask.name = "task";
+		newTask.id = text;
+		newTask.value = text;
+		
+		var label = document.createElement('label');
+		label.htmlFor = text;
+		label.innerHTML = text;
+		
+		var link1 = document.createElement('a');
+		// <a href="#" onclick="editTask(this)">edit</a> | <a href="#" onclick="deleteTask(this)">delete</a>   
+		link1.setAttribute("href", "#");
+		link1.setAttribute("onclick", "editTask(this)");
+		link1.setAttribute("class", "right");
+		link1.innerHTML = "edit&nbsp;";
+		
+		var link2 = document.createElement('a');
+		// <a href="#" onclick="editTask(this)">edit</a> | <a href="#" onclick="deleteTask(this)">delete</a>   
+		link2.setAttribute("href", "#");
+		link2.setAttribute("onclick", "deleteTask(this)");
+		link2.setAttribute("class", "right");
+		link2.innerHTML = "delete&nbsp;";
+
+		var container = document.createElement('div');
+		container.setAttribute("onkeypress", "doneEdit(event, this)");
+		container.appendChild(newTask);
+		container.appendChild(label);
+		container.appendChild(link2);					
+		container.appendChild(link1);
+		
+		var fieldset = document.getElementById('taskField');
+		fieldset.appendChild(container);
+		
+		document.getElementById('txt').value = "";
+		
+	}
+}
+
+//key press event
+function keyPress(e)
+{
+	var key = e.keyCode;
+	
+	//hit enter to add a task to the list
+	if(key ==13){
+		addTask();
+	}
+}
+
+//checks if a task is completed
+function taskCheck()
+{
+	var boxes = document.getElementsByTagName('input');
+	for(var i =0; i < boxes.length; i++)
+	{
+		if(boxes[i].type == "checkbox")
+		{
+			//If the user checks the checkbox next to a task, the system will cross-out the task to mark it as completed
+			if(boxes[i].checked == true) 
+			{
+				var label = findLabel(boxes[i]);
+				label.setAttribute("style", "text-decoration: line-through");
+						
+			}
+			
+			//If the user un-checks the checkbox next to a task, the system will remove the cross-out to mark the task as incomplete
+			else
+			{
+				var label = findLabel(boxes[i]);
+				label.setAttribute("style", "text-decoration: none");
+			}
+		}
+	}
+}
+
+//helper function
+function findLabel(e)
+{
+	var id = e.id;
+	var labels = document.getElementsByTagName('label');
+	for(var i = 0; i < labels.length; i++)
+	{
+		if(labels[i].htmlFor == id)
+			return labels[i];
+	}
+	
+}
+
+//if the user clicks the edit link next to a task, the task will become editable
+function editTask(element)
+{
+	var div = element.parentNode;
+	div.setAttribute("contenteditable", "true");
+}
+
+//If the user clicks the delete link next to a task, that task will be removed from the list
+function deleteTask(element)
+{
+	var parent = element.parentNode;
+	while(parent.hasChildNodes())
+	{
+		parent.removeChild(parent.firstChild);
+	}
+	
+}
+
+//The user will be able to save their edit by hitting the enter key
+function doneEdit(e, element)
+{
+	var key = e.keyCode;
+	
+	//hit enter to finish editing
+	if(key ==13){
+	element.setAttribute("contenteditable", "false");
+	}
+
+}
+</script>
+</head>
+<body>
+
+<div id="myList">
+<h2>To-Do List</h2>
+<input type="text" id="txt" placeholder="To-do" onkeypress="keyPress(event)">
+<input type="submit" onclick="addTask()" value="ADD">
+</div>
+<br>
+
+<form onchange="taskCheck()">
+<fieldset id="taskField">
+	<h3>Tasks: </h3>
+</fieldset>
+</form>
+
+</body>
+</html>

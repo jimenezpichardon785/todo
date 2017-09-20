@@ -1,0 +1,23 @@
+﻿#text{
+border: 1px solid;
+}
+
+a:link{
+	color:blue;
+	text-decoration: none;
+}
+a:visited{
+	color: blue;
+	text-decoration:none;
+}
+a:hover{
+	color:red;
+	text-decoration:underline;
+}
+fieldset{
+	width:250;
+}
+
+.right{
+	float:right;
+}
